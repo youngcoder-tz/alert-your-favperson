@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ROYAL MARRIAGE DECREE (No Refunds!)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Parisienne&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --pink-dark: #c71585;
+      --pink-medium: #db7093;
+      --pink-light: #ffb6c1;
+      --pink-lighter: #ffe0f0;
+      --gold: #d4af37;
+    }
+    
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, var(--pink-lighter), #fff5f9, #ffffff);
+      font-family: 'Playfair Display', serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+      flex-direction: column;
+      padding: 20px;
+      box-sizing: border-box;
+      transition: background 1s ease;
+    }
+
+    #initial-elements {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      max-width: 600px;
+      text-align: center;
+      animation: fadeIn 1s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    #prompt {
+      font-size: clamp(1.8rem, 5vw, 2.5rem);
+      color: var(--pink-dark);
+      margin-bottom: 30px;
+      font-family: 'Parisienne', cursive;
+      line-height: 1.4;
+      text-shadow: 1px 1px 3px rgba(255,255,255,0.7);
+      animation: textGlow 2s infinite alternate;
+    }
+
+    @keyframes textGlow {
+      from { text-shadow: 1px 1px 3px rgba(255,255,255,0.7); }
+      to { text-shadow: 0 0 10px rgba(255,182,193,0.8), 0 0 20px rgba(255,255,255,0.7); }
+    }
+
+    #thumbZone {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--pink-medium), var(--pink-dark));
+      border: 8px outset rgba(255,255,255,0.7);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 3.5rem;
+      cursor: pointer;
+      box-shadow: 0 0 40px rgba(219, 112, 147, 0.6),
+                  inset 0 0 20px rgba(255,255,255,0.3);
+      transition: all 0.3s ease;
+      user-select: none;
+      position: relative;
+      animation: pulse-glow 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(219, 112, 147, 0.6); }
+      50% { transform: scale(1.05); box-shadow: 0 0 60px rgba(219, 112, 147, 0.9); }
+    }
+
+    #thumbZone:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 50px rgba(219, 112, 147, 0.8),
+                  inset 0 0 25px rgba(255,255,255,0.4);
+    }
+
+    #thumbZone:active {
+      transform: scale(0.95);
+      animation: none;
+      background: radial-gradient(circle, var(--pink-dark), #a00050);
+    }
+
+    #countdown {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: white;
+      opacity: 0;
+      transition: opacity 0.3s;
+      margin-top: 10px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    }
+
+    /* Toast Notification Styles */
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 2000;
+      max-width: 300px;
+    }
+
+    .toast {
+      background: white;
+      border-left: 5px solid var(--pink-dark);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      animation: slideIn 0.5s ease-out forwards;
+      transform: translateX(120%);
+    }
+
+    @keyframes slideIn {
+      to { transform: translateX(0); }
+    }
+
+    .toast img {
+      width: 50px;
+      height: 50px;
+      margin-right: 10px;
+    }
+
+    .toast-content {
+      flex: 1;
+    }
+
+    .toast h3 {
+      margin: 0 0 5px 0;
+      color: var(--pink-dark);
+    }
+
+    .toast p {
+      margin: 0;
+      color: #555;
+    }
+
+    /* Certificate Styles */
+    #certificate-container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 90%;
+      max-width: 800px;
+      margin: 20px 0;
+    }
+
+    #certificate {
+      width: 100%;
+      background: #fffaf0;
+      padding: 40px;
+      box-sizing: border-box;
+      border: 15px ridge var(--pink-light);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      position: relative;
+      overflow: hidden;
+      animation: popIn 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+    }
+
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.5) rotate(-10deg); }
+      70% { opacity: 1; transform: scale(1.05) rotate(3deg); }
+      100% { opacity: 1; transform: scale(1) rotate(0deg); }
+    }
+
+    #certificate::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path fill="%23ffb6c1" fill-opacity="0.08" d="M30,50 Q50,30 70,50 Q50,70 30,50 Z"/></svg>');
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    .certificate-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(3rem, 7vw, 4rem);
+      color: var(--pink-dark);
+      margin: 0 0 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .certificate-subtitle {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      color: var(--pink-medium);
+      margin: 0 0 30px;
+    }
+
+    .certificate-body {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: #444;
+      line-height: 1.8;
+      margin-bottom: 30px;
+    }
+
+    .party-name {
+      font-family: 'Parisienne', cursive;
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      color: var(--pink-dark);
+      margin: 20px 0 5px;
+    }
+
+    .party-description {
+      font-size: clamp(0.8rem, 2vw, 1rem);
+      font-style: italic;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .signature-section {
+      display: flex;
+      justify-content: space-around;
+      margin: 40px 0 30px;
+      flex-wrap: wrap;
+    }
+
+    .signature-area {
+      text-align: center;
+      margin: 15px;
+      min-width: 200px;
+    }
+
+    .thumbprint-box {
+      width: 100px;
+      height: 120px;
+      background-color: #f9f9f9;
+      border: 1px solid #eee;
+      border-radius: 5px;
+      margin: 0 auto 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .thumbprint {
+      position: absolute;
+      width: 80%;
+      height: 80%;
+      top: 10%;
+      left: 10%;
+      background: radial-gradient(circle, #555 0%, #222 100%);
+      border-radius: 50%;
+      opacity: 0.7;
+    }
+
+    .signature-line {
+      width: 180px;
+      border-top: 2px dashed var(--pink-medium);
+      margin: 10px auto;
+      position: relative;
+    }
+
+    .signature-label {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fffaf0;
+      padding: 0 15px;
+      color: var(--pink-dark);
+      font-size: 0.9rem;
+      font-style: italic;
+    }
+
+    .signature-text {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2rem;
+      color: #333;
+    }
+
+    .witness-section {
+      font-size: 0.9rem;
+      color: #666;
+      font-style: italic;
+      margin-top: 30px;
+    }
+
+    .gold-seal {
+      position: absolute;
+      bottom: 20px;
+      right: 30px;
+      width: 80px;
+      height: 80px;
+      background: radial-gradient(circle at 30% 30%, #fff, var(--gold));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+      font-family: 'Great Vibes', cursive;
+      font-size: 0.9rem;
+      color: #8a6d3b;
+      text-align: center;
+      transform: rotate(-15deg);
+    }
+
+    /* Panic Button Styles */
+    #panic-button-container {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    #panic-button {
+      background: linear-gradient(to bottom, #ff4444, #cc0000);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      font-size: 1.2rem;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(204, 0, 0, 0.4);
+      transition: all 0.3s ease;
+      font-family: 'Playfair Display', serif;
+      font-weight: bold;
+    }
+
+    #panic-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(204, 0, 0, 0.6);
+    }
+
+    #panic-button:active {
+      transform: translateY(1px);
+      box-shadow: 0 3px 10px rgba(204, 0, 0, 0.6);
+    }
+
+    /* Confetti Styles */
+    #confetti {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1000;
+      display: none;
+    }
+
+    /* Heart Animation */
+    .heart {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0;
+      animation: floatUp 4s ease-in forwards;
+      font-size: 24px;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+    }
+
+    #reveal-message {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      color: var(--pink-dark);
+      margin-top: 30px;
+      font-family: 'Parisienne', cursive;
+      text-align: center;
+      opacity: 0;
+      animation: textFadeIn 1s ease 1s forwards;
+    }
+
+    @keyframes textFadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      z-index: 3000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      max-width: 80%;
+      max-height: 80vh;
+      overflow-y: auto;
+      text-align: center;
+      animation: modalFadeIn 0.5s ease-out;
+      position: relative;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #777;
+    }
+
+    .modal-close:hover {
+      color: #333;
+    }
+
+    .modal-gif {
+      max-width: 200px;
+      margin: 15px auto;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Initial Elements -->
+  <div id="initial-elements">
+    <div id="prompt">👑 ROYAL FINGERPRINT SCAN REQUIRED 👑<br>Press & Hold to Seal Your Fate!</div>
+    <div id="thumbZone" 
+      ontouchstart="handlePressStart()" 
+      ontouchend="handlePressEnd()" 
+      onmousedown="handlePressStart()" 
+      onmouseup="handlePressEnd()" 
+      onmouseleave="handlePressEnd()">
+      👆
+      <div id="countdown"></div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Certificate Container -->
+  <div id="certificate-container">
+    <div id="certificate">
+      <div class="certificate-title">OFFICIAL MARRIAGE DECREE</div>
+      <div class="certificate-subtitle">(No Takebacksies Edition)</div>
+      
+      <div class="certificate-body">
+        This legally binding document (not really) certifies that by placing your royal fingerprint on this most important button, you have entered into eternal matrimony with:
+      </div>
+
+      <div class="party-name">Your Favorite Person</div>
+      <div class="party-description">(That's me, in case you were wondering)</div>
+      
+      <div class="certificate-body" style="font-size: 1.8rem; font-family: 'Dancing Script', cursive; color: var(--pink-medium); margin: 10px 0 20px;">
+        &hearts;
+      </div>
+      
+      <div class="party-name">You</div>
+      <div class="party-description">(The poor soul who fell for this prank)</div>
+
+      <div class="certificate-body" style="margin-top: 30px;">
+        By the power vested in me by the Internet and questionable life choices, I now pronounce us officially stuck with each other! This arrangement comes with unlimited cuddles, mandatory meme-sharing, and a lifetime supply of bad puns.
+      </div>
+
+      <div class="signature-section">
+        <div class="signature-area">
+          <div class="thumbprint-box">
+            <div class="thumbprint"></div>
+          </div>
+          <div class="signature-line">
+            <span class="signature-label">Your Trapped Thumbprint</span>
+          </div>
+          <div class="signature-text">You</div>
+        </div>
+        
+        <div class="signature-area">
+          <div class="thumbprint-box">
+            <div class="thumbprint" style="background: radial-gradient(circle, var(--pink-medium) 0%, var(--pink-dark) 100%);"></div>
+          </div>
+          <div class="signature-line">
+            <span class="signature-label">My Evil Signature</span>
+          </div>
+          <div class="signature-text">Me</div>
+        </div>
+      </div>
+      
+      <div class="witness-section">
+        Witnessed by: The FBI (Fingerprint Bureau of Internet) and the entire Twitterverse
+      </div>
+
+      <div class="gold-seal">
+        OFFICIAL<br>SEAL<br>OF DOOM
+      </div>
+
+      <!-- Panic Button -->
+      <div id="panic-button-container">
+        <button id="panic-button">🚨 PANIC BUTTON 🚨</button>
+      </div>
+    </div>
+    
+    <div id="reveal-message">
+      MUAHAHAHA! YOU'RE STUCK WITH ME FOREVER! 💍
+    </div>
+  </div>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confetti"></canvas>
+
+  <!-- Modal for Panic Messages -->
+  <div class="modal" id="panicModal">
+    <div class="modal-content">
+      <span class="modal-close">&times;</span>
+      <h2 id="panicTitle">TOO LATE! 😈</h2>
+      <img class="modal-gif" id="panicGif" src="https://media.giphy.com/media/3o7TKSjRrfIPjeiVyM/giphy.gif" alt="Evil Laugh">
+      <p id="panicMessage">Your fingerprint is already in our database! There's no escape now!</p>
+      <audio id="panicAudio" src="https://www.soundjay.com/mechanical/sounds/siren-01.mp3" preload="auto"></audio>
+    </div>
+  </div>
+
+  <!-- Audio Elements -->
+  <audio id="successSound" src="https://www.soundjay.com/human/sounds/applause-8.mp3" preload="auto"></audio>
+  <audio id="laughSound" src="https://www.soundjay.com/human/sounds/laugh-evil-01.mp3" preload="auto"></audio>
+  <audio id="panicSound" src="https://www.soundjay.com/mechanical/sounds/siren-01.mp3" preload="auto"></audio>
+
+  <script>
+    // DOM Elements
+    const countdownEl = document.getElementById('countdown');
+    const thumbZone = document.getElementById('thumbZone');
+    const initialElements = document.getElementById('initial-elements');
+    const certificateContainer = document.getElementById('certificate-container');
+    const toastContainer = document.getElementById('toastContainer');
+    const panicButton = document.getElementById('panic-button');
+    const panicModal = document.getElementById('panicModal');
+    const modalClose = document.querySelector('.modal-close');
+    const panicTitle = document.getElementById('panicTitle');
+    const panicGif = document.getElementById('panicGif');
+    const panicMessage = document.getElementById('panicMessage');
+    
+    // Audio Elements
+    const successSound = document.getElementById('successSound');
+    const laughSound = document.getElementById('laughSound');
+    const panicSound = document.getElementById('panicSound');
+
+    // State Variables
+    let countdown;
+    let countdownInterval;
+    const panicMessages = [
+      {
+        title: "TOO LATE! 😈",
+        gif: "https://media.giphy.com/media/3o7TKSjRrfIPjeiVyM/giphy.gif",
+        message: "Your fingerprint is already in our database! There's no escape now!",
+        sound: "https://www.soundjay.com/mechanical/sounds/siren-01.mp3"
+      },
+      {
+        title: "NICE TRY! 🤣",
+        gif: "https://media.giphy.com/media/l0HU7JI1nzU9Zg3Be/giphy.gif",
+        message: "The marriage bots are already processing your documents! Resistance is futile!",
+        sound: "https://www.soundjay.com/mechanical/sounds/siren-02.mp3"
+      },
+      {
+        title: "OH NO YOU DON'T! 😆",
+        gif: "https://media.giphy.com/media/3o7aD2d7hy9ktXNDP2/giphy.gif",
+        message: "Our lawyers (a bunch of squirrels I trained) say you're legally bound!",
+        sound: "https://www.soundjay.com/mechanical/sounds/siren-03.mp3"
+      },
+      {
+        title: "HAHA NOPE! 🚫",
+        gif: "https://media.giphy.com/media/l0HU20BZ6LbSEITza/giphy.gif",
+        message: "The contract clearly states no refunds and no cancellations! (Page 257, section 12)",
+        sound: "https://www.soundjay.com/mechanical/sounds/alarm-03.mp3"
+      }
+    ];
+
+    // Event Listeners
+    thumbZone.addEventListener('mousedown', handlePressStart);
+    thumbZone.addEventListener('mouseup', handlePressEnd);
+    thumbZone.addEventListener('mouseleave', handlePressEnd);
+    thumbZone.addEventListener('touchstart', handlePressStart);
+    thumbZone.addEventListener('touchend', handlePressEnd);
+    
+    panicButton.addEventListener('click', showRandomPanicMessage);
+    modalClose.addEventListener('click', () => {
+      panicModal.style.display = 'none';
+    });
+
+    // Functions
+    function handlePressStart() {
+      if (countdownInterval) return;
+      
+      countdown = 3;
+      countdownEl.textContent = countdown;
+      countdownEl.style.opacity = '1';
+      thumbZone.style.animation = 'none';
+      thumbZone.innerHTML = '👆<div id="countdown">'+countdown+'</div>';
+      thumbZone.style.background = 'radial-gradient(circle, var(--pink-dark), #a00050)';
+
+      countdownInterval = setInterval(() => {
+        countdown--;
+        countdownEl.textContent = countdown;
+        if (countdown <= 0) {
+          clearInterval(countdownInterval);
+          countdownInterval = null;
+          showSuccessToast();
+        }
+      }, 1000);
+    }
+
+    function handlePressEnd() {
+      if (countdown > 0 && countdownInterval) {
+        clearInterval(countdownInterval);
+        countdownInterval = null;
+        countdownEl.style.opacity = '0';
+        thumbZone.innerHTML = '👆<div id="countdown"></div>';
+        thumbZone.style.animation = 'pulse-glow 2s infinite ease-in-out';
+        thumbZone.style.background = 'radial-gradient(circle, var(--pink-medium), var(--pink-dark))';
+      }
+    }
+
+    function showSuccessToast() {
+      // Play success sound
+      successSound.play();
+      
+      // Show fingerprint toast
+      createToast(
+        "https://media.giphy.com/media/l0HU7HSgXlo19J6us/giphy.gif",
+        "Fingerprint Verified!",
+        "Thank you for signing with your royal thumbprint! 🤣"
+      );
+      
+      // After 3 seconds, show laughing toast and reveal certificate
+      setTimeout(() => {
+        laughSound.play();
+        createToast(
+          "https://media.giphy.com/media/3o7TKSjRrfIPjeiVyM/giphy.gif",
+          "GOTCHA! 😈",
+          "You just signed the Marriage Certificate! MUAHAHA!"
+        );
+        
+        // After another 2 seconds, reveal certificate
+        setTimeout(revealCertificate, 2000);
+      }, 3000);
+    }
+
+    function createToast(gifUrl, title, message) {
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      
+      toast.innerHTML = `
+        <img src="${gifUrl}" alt="Laughing GIF">
+        <div class="toast-content">
+          <h3>${title}</h3>
+          <p>${message}</p>
+        </div>
+      `;
+      
+      toastContainer.appendChild(toast);
+      
+      // Remove toast after 5 seconds
+      setTimeout(() => {
+        toast.remove();
+      }, 5000);
+    }
+
+    function revealCertificate() {
+      initialElements.style.display = 'none';
+      certificateContainer.style.display = 'flex';
+      document.body.style.background = 'linear-gradient(135deg, #fff9fb, #fff0f5, #ffffff)';
+      startConfetti();
+      createHearts();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showRandomPanicMessage() {
+      // Play panic sound
+      panicSound.play();
+      
+      // Get random panic message
+      const randomMessage = panicMessages[Math.floor(Math.random() * panicMessages.length)];
+      
+      // Update modal content
+      panicTitle.textContent = randomMessage.title;
+      panicGif.src = randomMessage.gif;
+      panicMessage.textContent = randomMessage.message;
+      
+      // Show modal
+      panicModal.style.display = 'flex';
+    }
+
+    function createHearts() {
+      const hearts = ['❤️', '🧡', '💛', '💚', '💙', '💜', '🤎', '🖤', '💖', '💗', '💓', '💞'];
+      const container = document.body;
+      
+      for (let i = 0; i < 30; i++) {
+        setTimeout(() => {
+          const heart = document.createElement('div');
+          heart.className = 'heart';
+          heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+          heart.style.left = Math.random() * 100 + 'vw';
+          heart.style.top = '100vh';
+          heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+          heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+          container.appendChild(heart);
+          
+          setTimeout(() => {
+            heart.remove();
+          }, 4000);
+        }, i * 100);
+      }
+    }
+
+    function startConfetti() {
+      const canvas = document.getElementById('confetti');
+      canvas.style.display = 'block';
+
+      if (typeof ConfettiGenerator === 'function') {
+        const confetti = new ConfettiGenerator({
+          target: 'confetti',
+          max: 200,
+          size: 1.8,
+          animate: true,
+          props: ['circle', 'square', 'triangle', 'line', {type: 'heart', weight: 0.3}],
+          colors: [
+            [255, 105, 180], [255, 20, 147], [220, 20, 60], 
+            [255, 182, 193], [255, 192, 203], [219, 112, 147]
+          ],
+          clock: 35,
+          rotate: true,
+          start_from_edge: true,
+          respawn: true
+        });
+        confetti.render();
+        setTimeout(() => {
+          confetti.clear();
+          canvas.style.display = 'none';
+        }, 7000);
+      }
+    }
+
+    // Load confetti script dynamically
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/confetti-js@0.0.18/dist/index.min.js';
+    document.head.appendChild(script);
+  </script>
+</body>
+</html>
